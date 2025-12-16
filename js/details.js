@@ -3,6 +3,9 @@ const id = params.get("id");
 
 const container = document.getElementById("details");
 
+let focusArea = "button"; // button | episodes
+let episodeIndex = 0;
+
 getShows().then(shows => {
   const show = shows.find(s => s.id == id);
 
@@ -12,7 +15,7 @@ getShows().then(shows => {
       <div>
         <h1>${show.title}</h1>
         <p>${show.description}</p>
-        <button id="playBtn">Assistir</button>
+        <button id="playBtn" tabindex="0">Assistir agora</button>
       </div>
     </div>
 
@@ -20,20 +23,86 @@ getShows().then(shows => {
     <div class="episodes" id="episodes"></div>
   `;
 
+  const playBtn = document.getElementById("playBtn");
+  playBtn.classList.add("focused");
+
   getEpisodes(show.id).then(episodes => {
     const epContainer = document.getElementById("episodes");
 
-    episodes.forEach(ep => {
+    episodes.forEach((ep, index) => {
       const div = document.createElement("div");
       div.className = "episode";
       div.textContent = `Ep ${ep.number} - ${ep.title}`;
+      div.dataset.index = index;
+      div.dataset.url = ep.video_url;
+      div.tabIndex = 0;
 
       div.addEventListener("click", () => {
-        const encoded = encodeURIComponent(ep.video_url);
-        window.location.href = `player.html?url=${encoded}`;
+        openPlayer(ep.video_url);
       });
 
       epContainer.appendChild(div);
     });
+
+    const episodeEls = document.querySelectorAll(".episode");
+
+    document.addEventListener("keydown", (e) => {
+      switch (e.key) {
+
+        case "ArrowDown":
+          if (focusArea === "button") {
+            focusArea = "episodes";
+            playBtn.classList.remove("focused");
+            episodeEls[0]?.classList.add("focused");
+            episodeIndex = 0;
+          }
+          break;
+
+        case "ArrowUp":
+          if (focusArea === "episodes") {
+            focusArea = "button";
+            episodeEls[episodeIndex]?.classList.remove("focused");
+            playBtn.classList.add("focused");
+          }
+          break;
+
+        case "ArrowRight":
+          if (focusArea === "episodes" && episodeIndex < episodeEls.length - 1) {
+            episodeEls[episodeIndex].classList.remove("focused");
+            episodeIndex++;
+            episodeEls[episodeIndex].classList.add("focused");
+          }
+          break;
+
+        case "ArrowLeft":
+          if (focusArea === "episodes" && episodeIndex > 0) {
+            episodeEls[episodeIndex].classList.remove("focused");
+            episodeIndex--;
+            episodeEls[episodeIndex].classList.add("focused");
+          }
+          break;
+
+        case "Enter":
+          if (focusArea === "button") {
+            openPlayer(show.episodes?.[0]?.video_url);
+          } else {
+            const url = episodeEls[episodeIndex].dataset.url;
+            openPlayer(url);
+          }
+          break;
+
+        case "Backspace":
+        case "Escape":
+          window.location.href = "index.html";
+          break;
+      }
+    });
   });
 });
+
+function openPlayer(url) {
+  if (!url) return;
+  const encoded = encodeURIComponent(url);
+  window.location.href = `player.html?url=${encoded}`;
+}
+

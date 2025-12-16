@@ -60,3 +60,19 @@ video {
   height: 100vh;
   background: black;
 }
+.focused {
+  outline: 4px solid #1db954;
+  transform: scale(1.05);
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.episode {
+  padding: 10px;
+  border-radius: 8px;
+}
+

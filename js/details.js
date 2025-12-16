@@ -40,10 +40,15 @@ getShows().then(shows => {
       div.dataset.url = ep.video_url;
       div.tabIndex = 0;
 
+      div.addEventListener("focus", () => {
+      document.getElementById("bg").style.backgroundImage =
+        `url(${show.banner_url})`;
+    });
+
       div.addEventListener("click", () => {
         openPlayer(ep.video_url);
       });
-
+      
       epContainer.appendChild(div);
     });
 

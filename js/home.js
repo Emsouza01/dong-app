@@ -3,6 +3,7 @@ const carousel = document.getElementById("carousel");
 DATA.forEach((item, index) => {
   const card = document.createElement("div");
   card.className = "card" + (index === 0 ? " active" : "");
+  card.dataset.index = index;
 
   card.innerHTML = `
     <img src="${item.cover}">
@@ -12,6 +13,10 @@ DATA.forEach((item, index) => {
   carousel.appendChild(card);
 });
 
-navigate(document.querySelectorAll(".card"), (item) => {
-  window.location.href = `details.html?id=${DATA[item].id}`;
+const cards = document.querySelectorAll(".card");
+
+navigate(cards, (card) => {
+  const index = card.dataset.index;
+  const id = DATA[index].id;
+  window.location.href = `details.html?id=${id}`;
 });

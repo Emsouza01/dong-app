@@ -49,6 +49,11 @@ getShows().then(shows => {
       cards[currentIndex].click();
     }
 
+    if (shows.length) {
+      document.getElementById("bg").style.backgroundImage =
+        `url(${shows[0].banner_url || shows[0].poster_url})`;
+    }
+
     cards.forEach(c => c.classList.remove("active"));
     cards[currentIndex].classList.add("active");
 

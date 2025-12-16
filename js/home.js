@@ -13,6 +13,16 @@ getShows().then(shows => {
       <h3>${item.title}</h3>
     `;
 
+    card.addEventListener("focus", () => {
+      document.getElementById("bg").style.backgroundImage =
+        `url(${show.banner_url || show.poster_url})`;
+    });
+    
+    card.addEventListener("mouseenter", () => {
+      document.getElementById("bg").style.backgroundImage =
+        `url(${show.banner_url || show.poster_url})`;
+    });
+
     card.addEventListener("click", () => {
       window.location.href = `details.html?id=${item.id}`;
     });

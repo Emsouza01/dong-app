@@ -3,6 +3,9 @@ const id = params.get("id");
 
 const container = document.getElementById("details");
 
+document.getElementById("bg").style.backgroundImage =
+  `url(${show.banner_url})`;
+
 let focusArea = "button"; // button | episodes
 let episodeIndex = 0;
 

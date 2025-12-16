@@ -1,11 +1,9 @@
 const carousel = document.getElementById("carousel");
 let currentIndex = 0;
-let shows = [];
 
-getShows().then(data => {
-  shows = data;
+getShows().then(shows => {
 
-  data.forEach((item, index) => {
+  shows.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
     card.dataset.index = index;
@@ -23,9 +21,12 @@ getShows().then(data => {
   });
 
   const cards = document.querySelectorAll(".card");
+  if (!cards.length) return;
+
   cards[0].classList.add("active");
 
   document.addEventListener("keydown", (e) => {
+
     if (e.key === "ArrowRight" && currentIndex < cards.length - 1) {
       currentIndex++;
     }
@@ -43,5 +44,5 @@ getShows().then(data => {
 
     carousel.style.transform = `translateX(-${currentIndex * 300}px)`;
   });
-});
 
+});

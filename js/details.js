@@ -29,7 +29,8 @@ getShows().then(shows => {
       div.textContent = `Ep ${ep.number} - ${ep.title}`;
 
       div.addEventListener("click", () => {
-        alert("Player vem na próxima etapa 😄");
+        const encoded = encodeURIComponent(ep.video_url);
+        window.location.href = `player.html?url=${encoded}`;
       });
 
       epContainer.appendChild(div);

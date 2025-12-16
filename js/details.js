@@ -2,19 +2,21 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 const container = document.getElementById("details");
+const bg = document.getElementById("bg");
 
-document.getElementById("bg").style.backgroundImage =
-  `url(${show.banner_url})`;
-
-let focusArea = "button"; // button | episodes
+let focusArea = "button";
 let episodeIndex = 0;
 
 getShows().then(shows => {
   const show = shows.find(s => s.id == id);
+  if (!show) return;
+
+  // 🔥 FUNDO ESTILO NETFLIX
+  bg.style.backgroundImage = `url(${show.banner_url || show.poster_url})`;
 
   container.innerHTML = `
     <div class="details-banner">
-      <img src="${show.banner}">
+      <img src="${show.poster_url}">
       <div>
         <h1>${show.title}</h1>
         <p>${show.description}</p>
@@ -36,19 +38,19 @@ getShows().then(shows => {
       const div = document.createElement("div");
       div.className = "episode";
       div.textContent = `Ep ${ep.number} - ${ep.title}`;
-      div.dataset.index = index;
       div.dataset.url = ep.video_url;
       div.tabIndex = 0;
 
+      // 🔁 mantém fundo ao navegar
       div.addEventListener("focus", () => {
-      document.getElementById("bg").style.backgroundImage =
-        `url(${show.banner_url})`;
-    });
+        bg.style.backgroundImage =
+          `url(${show.banner_url || show.poster_url})`;
+      });
 
       div.addEventListener("click", () => {
         openPlayer(ep.video_url);
       });
-      
+
       epContainer.appendChild(div);
     });
 
@@ -92,10 +94,9 @@ getShows().then(shows => {
 
         case "Enter":
           if (focusArea === "button") {
-            openPlayer(show.episodes?.[0]?.video_url);
+            openPlayer(episodes[0]?.video_url);
           } else {
-            const url = episodeEls[episodeIndex].dataset.url;
-            openPlayer(url);
+            openPlayer(episodeEls[episodeIndex].dataset.url);
           }
           break;
 
@@ -110,7 +111,6 @@ getShows().then(shows => {
 
 function openPlayer(url) {
   if (!url) return;
-  const encoded = encodeURIComponent(url);
-  window.location.href = `player.html?url=${encoded}`;
+  window.location.href =
+    `player.html?url=${encodeURIComponent(url)}`;
 }
-

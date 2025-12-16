@@ -81,9 +81,9 @@ button {
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: blur(20px);
+  filter: blur(18px);
   transform: scale(1.1);
-  transition: background-image 0.4s ease-in-out;
+  transition: background-image 0.4s ease;
   z-index: -2;
 }
 
@@ -104,3 +104,7 @@ button {
   z-index: 1;
 }
 
+.focused {
+  outline: 4px solid #1db954;
+  transform: scale(1.05);
+}

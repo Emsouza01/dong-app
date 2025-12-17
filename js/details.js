@@ -12,7 +12,6 @@ getShows().then(shows => {
   if (!show) return;
 
   const bgImage = show.banner?.trim() || show.cover?.trim();
-
   if (bgImage) {
     bg.style.backgroundImage = `url(${bgImage})`;
   }
@@ -30,8 +29,6 @@ getShows().then(shows => {
     <h2>Episódios</h2>
     <div class="episodes" id="episodes"></div>
   `;
-});
-
 
   const playBtn = document.getElementById("playBtn");
   playBtn.classList.add("focused");
@@ -39,7 +36,7 @@ getShows().then(shows => {
   getEpisodes(show.id).then(episodes => {
     const epContainer = document.getElementById("episodes");
 
-    episodes.forEach(ep => {
+    episodes.forEach((ep, index) => {
       const div = document.createElement("div");
       div.className = "episode";
       div.textContent = `Ep ${ep.number} - ${ep.title}`;
@@ -111,7 +108,7 @@ getShows().then(shows => {
       }
     });
   });
- });
+});
 
 function openPlayer(url) {
   if (!url) return;
@@ -119,8 +116,3 @@ function openPlayer(url) {
     `player.html?url=${encodeURIComponent(url)}`;
 }
 
-function openPlayer(url) {
-  if (!url) return;
-  window.location.href =
-    `player.html?url=${encodeURIComponent(url)}`;
-}

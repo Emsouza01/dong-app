@@ -11,10 +11,10 @@ body {
   margin-bottom: 20px;
 }
 
-.carousel {
+#carousel {
   display: flex;
-  gap: 20px;
-  transition: transform .3s;
+  gap: 26px;              /* mais respiro */
+  transition: transform 0.4s ease;
 }
 
 .card {

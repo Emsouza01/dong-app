@@ -109,6 +109,12 @@ getShows().then(shows => {
   });
 });
 
+setTimeout(() => {
+  document.getElementById("bg").style.backgroundImage =
+    "url('https://images.unsplash.com/photo-1524985069026-dd778a71c7b4')";
+}, 500);
+
+
 function openPlayer(url) {
   if (!url) return;
   window.location.href =

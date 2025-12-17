@@ -85,6 +85,7 @@ button {
   transform: scale(1.1);
   transition: background-image 0.4s ease;
   z-index: -2;
+  outline: 5px solid red;
 }
 
 .overlay {

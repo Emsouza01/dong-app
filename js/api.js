@@ -1,3 +1,5 @@
+console.log("api.js carregou");
+
 const SUPABASE_URL = "https://tavlmlqmucolsdefkvtl.supabase.co";
 const SUPABASE_KEY = "sb_publishable_NEbHOg9yXKT9eV-Unspsjg_n-8EIoDS";
 

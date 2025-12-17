@@ -88,13 +88,15 @@ button {
   position: fixed;
   inset: 0;
   background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.75),
-    rgba(0,0,0,0.4),
-    rgba(0,0,0,0.15)
+    135deg,
+    rgba(0,0,0,0.15) 0%,   /* topo direito – imagem visível */
+    rgba(0,0,0,0.35) 35%,
+    rgba(0,0,0,0.65) 70%,
+    rgba(0,0,0,0.85) 100% /* canto inferior esquerdo */
   );
   z-index: -1;
 }
+
 
 .app {
   position: relative;

@@ -12,7 +12,9 @@ getShows().then(shows => {
   if (!show) return;
 
   // 🔥 FUNDO ESTILO NETFLIX
-  bg.style.backgroundImage = `url(${show.banner_url || show.poster_url})`;
+  bg.style.backgroundImage =
+  `url(${show.banner_url || show.poster_url})`;
+
 
   container.innerHTML = `
     <div class="details-banner">

@@ -9,15 +9,9 @@ let episodeIndex = 0;
 
 getShows().then(shows => {
   const show = shows.find(s => s.id == id);
-console.log("SHOW:", show);
-console.log("banner_url:", show.banner_url);
-console.log("poster_url:", show.poster_url);
-  
   if (!show) return;
 
-  const bgImage =
-    show.banner_url?.trim() ||
-    show.poster_url?.trim();
+  const bgImage = show.banner?.trim() || show.cover?.trim();
 
   if (bgImage) {
     bg.style.backgroundImage = `url(${bgImage})`;
@@ -25,7 +19,7 @@ console.log("poster_url:", show.poster_url);
 
   container.innerHTML = `
     <div class="details-banner">
-      <img src="${show.poster_url}">
+      <img src="${show.cover}">
       <div>
         <h1>${show.title}</h1>
         <p>${show.description}</p>
@@ -36,6 +30,8 @@ console.log("poster_url:", show.poster_url);
     <h2>Episódios</h2>
     <div class="episodes" id="episodes"></div>
   `;
+});
+
 
   const playBtn = document.getElementById("playBtn");
   playBtn.classList.add("focused");

@@ -26,8 +26,7 @@ getShows().then(shows => {
     };
 
     card.addEventListener("focus", updateBackground);
-    card.addEventListener("mouseenter", updateBackground);
-
+  
     card.addEventListener("click", () => {
       window.location.href = `details.html?id=${item.id}`;
     });

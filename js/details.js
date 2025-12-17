@@ -111,6 +111,7 @@ getShows().then(shows => {
       }
     });
   });
+ });
 
 function openPlayer(url) {
   if (!url) return;

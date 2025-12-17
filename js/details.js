@@ -15,6 +15,10 @@ let episodeIndex = 0;
 
 getShows().then(shows => {
   const show = shows.find(s => s.id == id);
+console.log("SHOW:", show);
+console.log("banner_url:", show.banner_url);
+console.log("poster_url:", show.poster_url);
+  
   if (!show) return;
 
   const bgImage =

@@ -9,7 +9,7 @@ async function getShows() {
     }
   });
 
-  return await res.json();
+  return res.json();
 }
 
 async function getEpisodes(showId) {
@@ -23,5 +23,5 @@ async function getEpisodes(showId) {
     }
   );
 
-  return await res.json();
+  return res.json();
 }

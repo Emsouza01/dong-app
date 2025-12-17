@@ -18,21 +18,19 @@ body {
 }
 
 .card {
-  width: 280px;
-  opacity: .5;
-  transform: scale(.9);
-  transition: .3s;
+  width: 260px;
+  margin-right: 40px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card.active {
+  transform: scale(1.15);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
 
 .card img {
   width: 100%;
   border-radius: 10px;
-}
-
-.card.active {
-  opacity: 1;
-  transform: scale(1.1);
-  border: 3px solid #1db954;
 }
 
 .details-banner {

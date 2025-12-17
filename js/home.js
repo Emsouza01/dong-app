@@ -1,27 +1,32 @@
 const carousel = document.getElementById("carousel");
+const bg = document.getElementById("bg");
+
 let currentIndex = 0;
+let showsCache = [];
 
 getShows().then(shows => {
+  showsCache = shows;
 
   shows.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
-    card.dataset.index = index;
+    card.tabIndex = 0;
 
     card.innerHTML = `
       <img src="${item.cover}">
       <h3>${item.title}</h3>
     `;
 
-    card.addEventListener("focus", () => {
-      document.getElementById("bg").style.backgroundImage =
-        `url(${show.banner_url || show.poster_url})`;
-    });
-    
-    card.addEventListener("mouseenter", () => {
-      document.getElementById("bg").style.backgroundImage =
-        `url(${show.banner_url || show.poster_url})`;
-    });
+    const bgImage = item.banner?.trim() || item.cover?.trim();
+
+    const updateBackground = () => {
+      if (bgImage) {
+        bg.style.backgroundImage = `url(${bgImage})`;
+      }
+    };
+
+    card.addEventListener("focus", updateBackground);
+    card.addEventListener("mouseenter", updateBackground);
 
     card.addEventListener("click", () => {
       window.location.href = `details.html?id=${item.id}`;
@@ -33,7 +38,13 @@ getShows().then(shows => {
   const cards = document.querySelectorAll(".card");
   if (!cards.length) return;
 
+  // fundo inicial
+  const firstBg =
+    shows[0].banner?.trim() || shows[0].cover?.trim();
+  if (firstBg) bg.style.backgroundImage = `url(${firstBg})`;
+
   cards[0].classList.add("active");
+  cards[0].focus();
 
   document.addEventListener("keydown", (e) => {
 
@@ -47,17 +58,15 @@ getShows().then(shows => {
 
     if (e.key === "Enter") {
       cards[currentIndex].click();
-    }
-
-    if (shows.length) {
-      document.getElementById("bg").style.backgroundImage =
-        `url(${shows[0].banner_url || shows[0].poster_url})`;
+      return;
     }
 
     cards.forEach(c => c.classList.remove("active"));
     cards[currentIndex].classList.add("active");
+    cards[currentIndex].focus();
 
-    carousel.style.transform = `translateX(-${currentIndex * 300}px)`;
+    carousel.style.transform =
+      `translateX(-${currentIndex * 300}px)`;
   });
-
 });
+

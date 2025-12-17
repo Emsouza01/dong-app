@@ -1,5 +1,3 @@
-console.log("api.js carregou");
-
 const SUPABASE_URL = "https://tavlmlqmucolsdefkvtl.supabase.co";
 const SUPABASE_KEY = "sb_publishable_NEbHOg9yXKT9eV-Unspsjg_n-8EIoDS";
 
@@ -10,12 +8,13 @@ async function getShows() {
       Authorization: `Bearer ${SUPABASE_KEY}`
     }
   });
-  return res.json();
+
+  return await res.json();
 }
 
 async function getEpisodes(showId) {
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/episodes?show_id=eq.${showId}&order=number.asc`,
+    `${SUPABASE_URL}/rest/v1/episodes?show_id=eq.${showId}&order=number`,
     {
       headers: {
         apikey: SUPABASE_KEY,
@@ -23,5 +22,6 @@ async function getEpisodes(showId) {
       }
     }
   );
-  return res.json();
+
+  return await res.json();
 }

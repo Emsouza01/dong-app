@@ -11,10 +11,13 @@ getShows().then(shows => {
   const show = shows.find(s => s.id == id);
   if (!show) return;
 
-  // 🔥 FUNDO ESTILO NETFLIX
-  bg.style.backgroundImage =
-  `url(${show.banner_url || show.poster_url})`;
+  const bgImage =
+    show.banner_url?.trim() ||
+    show.poster_url?.trim();
 
+  if (bgImage) {
+    bg.style.backgroundImage = `url(${bgImage})`;
+  }
 
   container.innerHTML = `
     <div class="details-banner">
@@ -36,17 +39,17 @@ getShows().then(shows => {
   getEpisodes(show.id).then(episodes => {
     const epContainer = document.getElementById("episodes");
 
-    episodes.forEach((ep, index) => {
+    episodes.forEach(ep => {
       const div = document.createElement("div");
       div.className = "episode";
       div.textContent = `Ep ${ep.number} - ${ep.title}`;
       div.dataset.url = ep.video_url;
       div.tabIndex = 0;
 
-      // 🔁 mantém fundo ao navegar
       div.addEventListener("focus", () => {
-        bg.style.backgroundImage =
-          `url(${show.banner_url || show.poster_url})`;
+        if (bgImage) {
+          bg.style.backgroundImage = `url(${bgImage})`;
+        }
       });
 
       div.addEventListener("click", () => {
@@ -60,7 +63,6 @@ getShows().then(shows => {
 
     document.addEventListener("keydown", (e) => {
       switch (e.key) {
-
         case "ArrowDown":
           if (focusArea === "button") {
             focusArea = "episodes";
@@ -95,11 +97,11 @@ getShows().then(shows => {
           break;
 
         case "Enter":
-          if (focusArea === "button") {
-            openPlayer(episodes[0]?.video_url);
-          } else {
-            openPlayer(episodeEls[episodeIndex].dataset.url);
-          }
+          openPlayer(
+            focusArea === "button"
+              ? episodes[0]?.video_url
+              : episodeEls[episodeIndex].dataset.url
+          );
           break;
 
         case "Backspace":
@@ -111,11 +113,11 @@ getShows().then(shows => {
   });
 });
 
-setTimeout(() => {
-  document.getElementById("bg").style.backgroundImage =
-    "url('https://images.unsplash.com/photo-1524985069026-dd778a71c7b4')";
-}, 500);
-
+function openPlayer(url) {
+  if (!url) return;
+  window.location.href =
+    `player.html?url=${encodeURIComponent(url)}`;
+}
 
 function openPlayer(url) {
   if (!url) return;

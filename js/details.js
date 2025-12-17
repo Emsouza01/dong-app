@@ -1,9 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const bg = document.getElementById("bg");
-  bg.style.backgroundImage =
-    "url('https://images.unsplash.com/photo-1524985069026-dd778a71c7b4')";
-});
-
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 

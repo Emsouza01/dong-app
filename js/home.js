@@ -1,47 +1,73 @@
-// home.js
-const CONFIG = {
-  cardsPerRow: 5,
-  rows: 3,
-};
+const carousel = document.getElementById("carousel");
+const bg = document.getElementById("bg");
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const rowsContainer = document.getElementById("rows");
-  rowsContainer.classList.add("rows");
+let currentIndex = 0;
+let cards = [];
 
-  const shows = await getShows();
+getShows().then(shows => {
 
-  for (let r = 0; r < CONFIG.rows; r++) {
-    const row = document.createElement("div");
-    row.className = "carousel-row";
-    row.dataset.row = r;
+  carousel.innerHTML = "";
 
-    const start = r * CONFIG.cardsPerRow;
-    const end = start + CONFIG.cardsPerRow * 4;
+  shows.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.tabIndex = 0;
 
-    shows.slice(start, end).forEach(item => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.tabIndex = 0;
+    card.innerHTML = `
+      <img src="${item.cover}">
+      <h3>${item.title}</h3>
+    `;
 
-      card.innerHTML = `
-        <img src="${item.cover}">
-        <h3>${item.title}</h3>
-      `;
+    const bgImage = item.banner?.trim() || item.cover?.trim();
 
-      card.addEventListener("focus", () => {
-        setBackground(item.banner || item.cover);
-      });
-
-      card.addEventListener("click", () => {
-        window.location.href = `details.html?id=${item.id}`;
-      });
-
-      row.appendChild(card);
+    card.addEventListener("focus", () => {
+      if (bgImage) bg.style.backgroundImage = `url(${bgImage})`;
     });
 
-    rowsContainer.appendChild(row);
-  }
+    card.addEventListener("click", () => {
+      window.location.href = `details.html?id=${item.id}`;
+    });
 
-  initNavigation();
+    carousel.appendChild(card);
+  });
+
+  cards = Array.from(document.querySelectorAll(".card"));
+  if (!cards.length) return;
+
+  // fundo inicial
+  const firstBg = shows[0].banner || shows[0].cover;
+  if (firstBg) bg.style.backgroundImage = `url(${firstBg})`;
+
+  cards[0].classList.add("active");
+  cards[0].focus();
+
+  document.addEventListener("keydown", (e) => {
+    const columns = 5;
+
+    cards[currentIndex].classList.remove("active");
+
+    if (e.key === "ArrowRight" && currentIndex < cards.length - 1) {
+      currentIndex++;
+    }
+
+    if (e.key === "ArrowLeft" && currentIndex > 0) {
+      currentIndex--;
+    }
+
+    if (e.key === "ArrowDown" && currentIndex + columns < cards.length) {
+      currentIndex += columns;
+    }
+
+    if (e.key === "ArrowUp" && currentIndex - columns >= 0) {
+      currentIndex -= columns;
+    }
+
+    if (e.key === "Enter") {
+      cards[currentIndex].click();
+      return;
+    }
+
+    cards[currentIndex].classList.add("active");
+    cards[currentIndex].focus({ preventScroll: true });
+  });
 });
-

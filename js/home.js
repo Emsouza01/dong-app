@@ -1,3 +1,4 @@
+console.log("HOME JS CARREGADO");
 const carousel = document.getElementById("carousel");
 const bg = document.getElementById("bg");
 

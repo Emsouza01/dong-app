@@ -97,7 +97,7 @@ body {
    CARD
 ========================= */
 .card {
-  min-width: 170px;
+  min-width: 110px;
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);

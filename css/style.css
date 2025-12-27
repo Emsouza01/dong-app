@@ -7,7 +7,6 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 30px;
-  overflow: hidden;
 }
 
 /* =========================
@@ -84,9 +83,11 @@ body {
   display: flex;
   gap: 26px;
   overflow-x: auto;
+  overflow-y: visible;
   scroll-behavior: smooth;
   padding: 20px 40px;
 }
+
 
 #carousel::-webkit-scrollbar {
   display: none;

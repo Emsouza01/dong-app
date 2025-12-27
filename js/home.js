@@ -1,3 +1,8 @@
+const CONFIG = {
+  cardsPerRow: 5,     // limite visível por linha
+  rows: 3,            // quantidade de linhas
+};
+
 const carousel = document.getElementById("carousel");
 const bg = document.getElementById("bg");
 

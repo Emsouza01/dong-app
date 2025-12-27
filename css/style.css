@@ -81,17 +81,16 @@ body {
 ========================= */
 #carousel {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* LIMITE DE 5 */
+  grid-template-columns: repeat(5, 200px); /* FIXO: 5 cards */
   gap: 26px;
+  justify-content: start;
 }
-
 /* =========================
    CARD
 ========================= */
 
 .card {
-  width: 100%;
-  max-width: 200px;
+  width: 200px;
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);
@@ -114,10 +113,10 @@ body {
 
 .card.active {
   transform: scale(1.08);
+  background: rgba(0,0,0,0.55);
   box-shadow: 0 14px 40px rgba(0,0,0,0.6);
   opacity: 1;
 }
-
 /* =========================
    DETAILS
 ========================= */

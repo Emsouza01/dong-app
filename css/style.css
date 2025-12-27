@@ -80,37 +80,23 @@ body {
    CARROSSEL
 ========================= */
 #carousel {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* LIMITE DE 5 */
   gap: 26px;
-  overflow-x: auto;
-  overflow-y: visible;
-  scroll-behavior: smooth;
-  padding: 20px 40px;
-}
-
-
-#carousel::-webkit-scrollbar {
-  display: none;
 }
 
 /* =========================
    CARD
 ========================= */
+
 .card {
-  min-width: 110px;
+  width: 100%;
+  max-width: 200px;
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
   opacity: 0.85;
-
-  transform-origin: center center;
-  will-change: transform;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease,
-    opacity 0.25s ease;
 }
 
 .card img {
@@ -119,7 +105,7 @@ body {
 }
 
 .card h3 {
-  font-size: 13px;
+  font-size: 14px;
   padding: 8px 10px;
   margin: 0;
   color: #e5e5e5;
@@ -127,8 +113,7 @@ body {
 }
 
 .card.active {
-  transform: scale(1.05);
-  background: rgba(0,0,0,0.55);
+  transform: scale(1.08);
   box-shadow: 0 14px 40px rgba(0,0,0,0.6);
   opacity: 1;
 }

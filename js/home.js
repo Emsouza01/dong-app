@@ -4,7 +4,7 @@ const bg = document.getElementById("bg");
 
 let currentIndex = 0;
 let cards = [];
-const COLUMNS = 5;
+const COLUMNS = 6;
 
 getShows().then(shows => {
 

@@ -187,3 +187,20 @@ button {
   font-size: 18px;
   cursor: pointer;
 }
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.carousel-row {
+  display: flex;
+  gap: 26px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 40px;
+}
+
+.carousel-row::-webkit-scrollbar {
+  display: none;
+}

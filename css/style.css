@@ -1,33 +1,115 @@
+/* =========================
+   RESET / BASE
+========================= */
 body {
   background: #000;
   color: #fff;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 30px;
+  overflow: hidden;
 }
 
+/* =========================
+   FUNDO (IMAGEM BASE)
+========================= */
+#bg {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center top; /* topo mais visível */
+  transform: scale(1.08);
+  z-index: -3;
+}
+
+/* =========================
+   BLUR GRADIENTE (BAIXO)
+========================= */
+#bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  /* blur só na parte inferior */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.15) 30%,
+    rgba(0,0,0,0.65) 60%,
+    rgba(0,0,0,1) 100%
+  );
+
+  background: rgba(0,0,0,0.35);
+}
+
+/* =========================
+   OVERLAY ESCURO (LEITURA)
+========================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.35) 35%,
+    rgba(0,0,0,0.65) 70%,
+    rgba(0,0,0,0.85) 100%
+  );
+  z-index: -2;
+}
+
+/* =========================
+   APP CONTAINER
+========================= */
+.app {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   LOGO
+========================= */
 .logo {
   font-size: 28px;
   margin-bottom: 20px;
 }
 
+/* =========================
+   CARROSSEL
+========================= */
 #carousel {
   display: flex;
-  gap: 26px;              /* mais respiro */
-  transition: transform 0.4s ease;
+  gap: 26px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 40px;
 }
 
+#carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================
+   CARD
+========================= */
 .card {
-  width: 200px;            /* menor */
+  min-width: 200px;
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);
+  opacity: 0.85;
+
+  transform-origin: center center;
+  will-change: transform;
+
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
     background 0.25s ease,
     opacity 0.25s ease;
-  opacity: 0.85;
 }
 
 .card img {
@@ -44,13 +126,15 @@ body {
 }
 
 .card.active {
-  transform: scale(1.08);   /* zoom sutil */
+  transform: scale(1.08);
   background: rgba(0,0,0,0.55);
   box-shadow: 0 14px 40px rgba(0,0,0,0.6);
   opacity: 1;
 }
 
-
+/* =========================
+   DETAILS
+========================= */
 .details-banner {
   display: flex;
   gap: 30px;
@@ -61,6 +145,9 @@ body {
   border-radius: 10px;
 }
 
+/* =========================
+   EPISÓDIOS
+========================= */
 .episodes {
   display: flex;
   gap: 15px;
@@ -69,59 +156,33 @@ body {
 
 .episode {
   width: 200px;
-}
-
-video {
-  width: 100%;
-  height: 100vh;
-  background: black;
-}
-.focused {
-  outline: 4px solid #1db954;
-  transform: scale(1.05);
-}
-
-button {
-  padding: 12px 24px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.episode {
   padding: 10px;
   border-radius: 8px;
 }
 
-#bg {
-  position: fixed;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(12px) brightness(1.05) contrast(1.05);
-  transform: scale(1.1);
-  z-index: -2;
+/* =========================
+   PLAYER
+========================= */
+video,
+iframe {
+  width: 100%;
+  height: 100vh;
+  background: black;
 }
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0,0,0,0.15) 0%,   /* topo direito – imagem visível */
-    rgba(0,0,0,0.35) 35%,
-    rgba(0,0,0,0.65) 70%,
-    rgba(0,0,0,0.85) 100% /* canto inferior esquerdo */
-  );
-  z-index: -1;
-}
-
-
-.app {
-  position: relative;
-  z-index: 1;
-}
-
+/* =========================
+   FOCO TV
+========================= */
 .focused {
   outline: 4px solid #1db954;
   transform: scale(1.05);
+}
+
+/* =========================
+   BOTÕES
+========================= */
+button {
+  padding: 12px 24px;
+  font-size: 18px;
+  cursor: pointer;
 }

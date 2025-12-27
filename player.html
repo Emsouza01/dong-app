@@ -3,58 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Player</title>
-
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-</style>
 </head>
 <body>
-
-<iframe id="player" allowfullscreen allow="autoplay"></iframe>
-
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const rawUrl = params.get("url");
-
-  function extrairDailymotionId(url) {
-    if (!url) return null;
-
-    // dai.ly/x9w6txq
-    let match = url.match(/dai\.ly\/([a-zA-Z0-9]+)/);
-    if (match) return match[1];
-
-    // dailymotion.com/video/x9w6txq
-    match = url.match(/video\/([a-zA-Z0-9]+)/);
-    if (match) return match[1];
-
-    // embed/video/x9w6txq
-    match = url.match(/embed\/video\/([a-zA-Z0-9]+)/);
-    if (match) return match[1];
-
-    return null;
-  }
-
-  const videoId = extrairDailymotionId(rawUrl);
-
-  if (videoId) {
-    document.getElementById("player").src =
-      `https://www.dailymotion.com/embed/video/${videoId}?autoplay=1`;
-  } else {
-    document.body.innerHTML =
-      "<h2 style='color:white;text-align:center'>Vídeo inválido</h2>";
-  }
-</script>
-
+<div id="player"></div>
+  <button id="backBtn">← Voltar</button>  
+  <script src="js/player.js"></script>
 </body>
 </html>

@@ -99,3 +99,13 @@ function extractYoutubeId(url) {
   }
 }
 
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Backspace" || e.key === "Escape") {
+    history.back();
+  }
+});
+
+document.getElementById("backBtn").onclick = () => {
+  history.back();
+};
+

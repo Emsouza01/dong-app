@@ -27,7 +27,7 @@ function renderRows(items) {
         <h3>${item.title || item.name || 'Sem título'}</h3>
       `;
 
-      row.appendChild(card);
+      row.appendChild(card);  // Adiciona o card à linha
     });
 
     rowsContainer.appendChild(row);  // Adiciona a linha ao container
@@ -36,7 +36,6 @@ function renderRows(items) {
   console.log("Linhas e cards renderizados com sucesso");
 }
 
-// Quando o DOM estiver carregado, inicia o processo
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     console.log("Iniciando o carregamento dos dados...");
@@ -60,4 +59,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Erro ao renderizar os dados:', e);
   }
 });
-

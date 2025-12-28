@@ -1,101 +1,68 @@
-const MAX_PER_ROW = 5;  // Limita a quantidade de cards por linha
-const rowsContainer = document.getElementById('rows');
-let currentRow = 0;
+const carousel = document.getElementById("carousel");
 let currentIndex = 0;
 
-function renderRows(items) {
-  rowsContainer.innerHTML = ''; // Limpa qualquer conteúdo antigo
-
-  // Verifica se temos dados
-  if (!items || items.length === 0) {
-    console.log("Sem dados para exibir.");
+async function fetchData() {
+  const data = await getShows(); // Supabase API para obter os shows
+  if (!Array.isArray(data)) {
+    console.error('API não retornou dados válidos.');
     return;
   }
 
-  // Cria as linhas de cards (5 por linha)
-  for (let i = 0; i < items.length; i += MAX_PER_ROW) {
-    const rowItems = items.slice(i, i + MAX_PER_ROW);
-    const row = document.createElement('div');
-    row.className = 'carousel-row';
+  renderCards(data);
+}
 
-    rowItems.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card';
+function renderCards(items) {
+  carousel.innerHTML = ''; // Limpa o conteúdo anterior
 
-      card.innerHTML = `
-        <img src="${item.cover || item.image || ''}" alt="${item.title || item.name || ''}">
-        <h3>${item.title || item.name || 'Sem título'}</h3>
-      `;
+  items.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card" + (index === 0 ? " active" : ""); // Foco no primeiro card
 
-      card.addEventListener('focus', () => {
-        // Altera o fundo quando o card recebe o foco
-        document.getElementById('bg').style.backgroundImage = `url(${item.banner || item.cover})`;
-      });
+    card.innerHTML = `
+      <img src="${item.cover || item.image || ''}" alt="${item.title || item.name || ''}">
+      <h3>${item.title || item.name || 'Sem título'}</h3>
+    `;
 
-      card.addEventListener('click', () => {
-        // Navega para os detalhes do card ao clicar
-        window.location.href = `details.html?id=${item.id}`;
-      });
-
-      row.appendChild(card);
+    // Adiciona evento de foco para mudar o fundo
+    card.addEventListener('focus', () => {
+      document.getElementById('bg').style.backgroundImage = `url(${item.cover || item.banner})`;
     });
 
-    rowsContainer.appendChild(row);
-  }
+    // Navega para a página de detalhes ao clicar no card
+    card.addEventListener('click', () => {
+      window.location.href = `details.html?id=${item.id}`;
+    });
 
+    carousel.appendChild(card);
+  });
+
+  // Atualiza o foco
   updateFocus();
 }
 
-// Atualiza o foco de acordo com a linha e o card
+// Função para atualizar o foco nos cards
 function updateFocus() {
-  document.querySelectorAll('.card').forEach(c =>
-    c.classList.remove('active')
-  );
-
-  const row = rowsContainer.children[currentRow];
-  const card = row.children[currentIndex];
-
-  if (card) {
-    card.classList.add('active');
-    card.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'center',
-      block: 'nearest'
-    });
-  }
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(c => c.classList.remove('active'));
+  
+  const activeCard = cards[currentIndex];
+  activeCard.classList.add('active');
+  activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center' });
 }
 
-// Navegação
+// Navegação com as setas do teclado
 document.addEventListener('keydown', e => {
-  const rows = document.querySelectorAll('.carousel-row');
-
-  if (e.key === 'ArrowRight' && currentIndex < rows[currentRow].children.length - 1) {
+  const cards = document.querySelectorAll('.card');
+  
+  if (e.key === 'ArrowRight' && currentIndex < cards.length - 1) {
     currentIndex++;
   } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
     currentIndex--;
-  } else if (e.key === 'ArrowDown' && currentRow < rows.length - 1) {
-    currentRow++;
-    currentIndex = 0;
-  } else if (e.key === 'ArrowUp' && currentRow > 0) {
-    currentRow--;
-    currentIndex = 0;
   }
 
   updateFocus();
 });
 
-// Chama a API e renderiza os dados
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const data = await getShows();  // Supabase API
-
-    if (!Array.isArray(data)) {
-      console.error('API não retornou um array.');
-      return;
-    }
-
-    renderRows(data);
-  } catch (e) {
-    console.error('Erro ao renderizar os dados:', e);
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  fetchData(); // Chama a função para buscar os dados e renderizar os cards
 });

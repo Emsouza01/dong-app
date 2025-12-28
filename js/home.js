@@ -1,40 +1,96 @@
 const MAX_PER_ROW = 5;
-const rowsEl = document.getElementById("rows");
+const rowsContainer = document.getElementById('rows');
+let currentRow = 0;
+let currentIndex = 0;
 
-DATA.forEach((item, index) => {
-  // Verifica se precisamos criar uma nova linha
-  const rowIndex = Math.floor(index / MAX_PER_ROW);
-  let row = rowsEl.children[rowIndex];
+function renderRows(items) {
+  rowsContainer.innerHTML = ''; // Limpa qualquer conteúdo antigo
 
-  if (!row) {
-    // Cria uma nova linha, se necessário
-    row = document.createElement('div');
-    row.className = 'carousel-row';
-    rowsEl.appendChild(row);
+  // Verifica se temos dados
+  if (!items || items.length === 0) {
+    console.log("Sem dados para exibir.");
+    return;
   }
 
-  // Cria um card dentro da linha
-  const card = document.createElement("div");
-  card.className = "card" + (index === 0 ? " active" : "");
+  // Cria as linhas de cards (5 por linha)
+  for (let i = 0; i < items.length; i += MAX_PER_ROW) {
+    const rowItems = items.slice(i, i + MAX_PER_ROW);
+    const row = document.createElement('div');
+    row.className = 'carousel-row';
 
-  card.innerHTML = `
-    <img src="${item.cover}" alt="${item.title}">
-    <h3>${item.title}</h3>
-  `;
+    rowItems.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
 
-  row.appendChild(card);
-});
+      card.innerHTML = `
+        <img src="${item.cover || item.image || ''}" alt="${item.title || item.name || ''}">
+        <h3>${item.title || item.name || 'Sem título'}</h3>
+      `;
 
-// Função para navegar entre os cards
-function navigate(cards, callback) {
-  cards.forEach((card, index) => {
-    card.addEventListener('click', () => {
-      callback(index);
+      card.addEventListener('focus', () => {
+        // Altera o fundo quando o card recebe o foco
+        document.getElementById('bg').style.backgroundImage = `url(${item.banner || item.cover})`;
+      });
+
+      row.appendChild(card);
     });
-  });
+
+    rowsContainer.appendChild(row);
+  }
+
+  updateFocus();
 }
 
-// Navegar para a página de detalhes quando um card for clicado
-navigate(document.querySelectorAll(".card"), (item) => {
-  window.location.href = `details.html?id=${DATA[item].id}`;
+// Atualiza o foco de acordo com a linha e o card
+function updateFocus() {
+  document.querySelectorAll('.card').forEach(c =>
+    c.classList.remove('active')
+  );
+
+  const row = rowsContainer.children[currentRow];
+  const card = row.children[currentIndex];
+
+  if (card) {
+    card.classList.add('active');
+    card.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest'
+    });
+  }
+}
+
+// Navegação
+document.addEventListener('keydown', e => {
+  const rows = document.querySelectorAll('.carousel-row');
+
+  if (e.key === 'ArrowRight' && currentIndex < rows[currentRow].children.length - 1) {
+    currentIndex++;
+  } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+    currentIndex--;
+  } else if (e.key === 'ArrowDown' && currentRow < rows.length - 1) {
+    currentRow++;
+    currentIndex = 0;
+  } else if (e.key === 'ArrowUp' && currentRow > 0) {
+    currentRow--;
+    currentIndex = 0;
+  }
+
+  updateFocus();
+});
+
+// Chama a API e renderiza os dados
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const data = await getShows();  // Supabase API
+
+    if (!Array.isArray(data)) {
+      console.error('API não retornou um array.');
+      return;
+    }
+
+    renderRows(data);
+  } catch (e) {
+    console.error('Erro ao renderizar os dados:', e);
+  }
 });

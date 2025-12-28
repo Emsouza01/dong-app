@@ -1,18 +1,19 @@
+const MAX_PER_ROW = 5;
 let currentRow = 0;
 let currentIndex = 0;
 
-function renderRows(data) {
+function renderRows(items) {
   const rows = document.getElementById('rows');
   rows.innerHTML = '';
 
-  data.forEach((rowData, rowIndex) => {
+  for (let i = 0; i < items.length; i += MAX_PER_ROW) {
     const row = document.createElement('div');
     row.className = 'carousel-row';
 
-    rowData.forEach((item, index) => {
+    items.slice(i, i + MAX_PER_ROW).forEach((item, index) => {
       const card = document.createElement('div');
       card.className = 'card';
-      card.dataset.row = rowIndex;
+      card.dataset.row = rows.children.length;
       card.dataset.index = index;
 
       card.innerHTML = `
@@ -24,7 +25,7 @@ function renderRows(data) {
     });
 
     rows.appendChild(row);
-  });
+  }
 
   updateFocus();
 }
@@ -34,20 +35,18 @@ function updateFocus() {
     c.classList.remove('active')
   );
 
-  const selector = `.card[data-row="${currentRow}"][data-index="${currentIndex}"]`;
-  const card = document.querySelector(selector);
+  const card = document.querySelector(
+    `.card[data-row="${currentRow}"][data-index="${currentIndex}"]`
+  );
 
   if (card) {
     card.classList.add('active');
-    card.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'center',
-      block: 'nearest'
-    });
   }
 }
 
 document.addEventListener('keydown', e => {
+  const rows = document.querySelectorAll('.carousel-row');
+
   if (e.key === 'ArrowRight') currentIndex++;
   if (e.key === 'ArrowLeft') currentIndex--;
   if (e.key === 'ArrowDown') {
@@ -59,9 +58,10 @@ document.addEventListener('keydown', e => {
     currentIndex = 0;
   }
 
-  currentRow = Math.max(0, currentRow);
-  currentIndex = Math.max(0, currentIndex);
+  currentRow = Math.max(0, Math.min(currentRow, rows.length - 1));
+  currentIndex = Math.max(0, Math.min(currentIndex, rows[currentRow].children.length - 1));
 
   updateFocus();
 });
+
 

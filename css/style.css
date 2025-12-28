@@ -1,12 +1,11 @@
 /* =========================
    RESET / BASE
 ========================= */
-body {
-  background: #000;
-  color: #fff;
-  font-family: Arial, sans-serif;
+html, body {
   margin: 0;
-  padding: 30px;
+  padding: 0;
+  overflow: hidden; /* mata o scroll */
+  height: 100%;
 }
 
 /* =========================

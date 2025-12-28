@@ -1,61 +1,40 @@
 const MAX_PER_ROW = 5;
+const rowsEl = document.getElementById("rows");
 
-function renderRows(items) {
-  const rowsContainer = document.getElementById('rows');
-  rowsContainer.innerHTML = '';  // Limpa qualquer conteúdo antigo
+DATA.forEach((item, index) => {
+  // Verifica se precisamos criar uma nova linha
+  const rowIndex = Math.floor(index / MAX_PER_ROW);
+  let row = rowsEl.children[rowIndex];
 
-  // Verifique se os dados foram recebidos corretamente
-  if (!items || items.length === 0) {
-    console.log("Sem dados para exibir.");
-    return;
-  }
-
-  // Cria as linhas de cards (5 por linha)
-  for (let i = 0; i < items.length; i += MAX_PER_ROW) {
-    const rowItems = items.slice(i, i + MAX_PER_ROW);
-
-    const row = document.createElement('div');
+  if (!row) {
+    // Cria uma nova linha, se necessário
+    row = document.createElement('div');
     row.className = 'carousel-row';
-
-    rowItems.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      // Preenche a imagem e título
-      card.innerHTML = `
-        <img src="${item.cover || item.image || ''}" alt="${item.title || item.name || ''}">
-        <h3>${item.title || item.name || 'Sem título'}</h3>
-      `;
-
-      row.appendChild(card);  // Adiciona o card à linha
-    });
-
-    rowsContainer.appendChild(row);  // Adiciona a linha ao container
+    rowsEl.appendChild(row);
   }
 
-  console.log("Linhas e cards renderizados com sucesso");
+  // Cria um card dentro da linha
+  const card = document.createElement("div");
+  card.className = "card" + (index === 0 ? " active" : "");
+
+  card.innerHTML = `
+    <img src="${item.cover}" alt="${item.title}">
+    <h3>${item.title}</h3>
+  `;
+
+  row.appendChild(card);
+});
+
+// Função para navegar entre os cards
+function navigate(cards, callback) {
+  cards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+      callback(index);
+    });
+  });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    console.log("Iniciando o carregamento dos dados...");
-    
-    if (typeof getShows !== 'function') {
-      console.error('A função getShows não foi encontrada no api.js.');
-      return;
-    }
-
-    const data = await getShows();  // Chama a API e obtém os dados
-
-    console.log("Dados recebidos:", data);  // Mostra os dados no console para verificar
-
-    if (!Array.isArray(data)) {
-      console.error('API não retornou um array. Dados:', data);
-      return;
-    }
-
-    renderRows(data);  // Renderiza os cards na tela
-  } catch (e) {
-    console.error('Erro ao renderizar os dados:', e);
-  }
+// Navegar para a página de detalhes quando um card for clicado
+navigate(document.querySelectorAll(".card"), (item) => {
+  window.location.href = `details.html?id=${DATA[item].id}`;
 });

@@ -1,4 +1,4 @@
-const MAX_PER_ROW = 5;
+const MAX_PER_ROW = 5;  // Limita a quantidade de cards por linha
 const rowsContainer = document.getElementById('rows');
 let currentRow = 0;
 let currentIndex = 0;
@@ -30,6 +30,11 @@ function renderRows(items) {
       card.addEventListener('focus', () => {
         // Altera o fundo quando o card recebe o foco
         document.getElementById('bg').style.backgroundImage = `url(${item.banner || item.cover})`;
+      });
+
+      card.addEventListener('click', () => {
+        // Navega para os detalhes do card ao clicar
+        window.location.href = `details.html?id=${item.id}`;
       });
 
       row.appendChild(card);

@@ -25,6 +25,7 @@ html, body {
   background-repeat: no-repeat;
   transform: scale(1.05);
   z-index: -3;
+  transition: background-image 0.3s ease-in-out;
 }
 
 /* =========================
@@ -64,7 +65,7 @@ html, body {
 }
 
 /* =========================
-   ROWS (NETFLIX STYLE)
+   CAROUSEL ROW (LINHA DE CARDS)
 ========================= */
 #rows {
   display: flex;
@@ -73,7 +74,7 @@ html, body {
 }
 
 /* =========================
-   CAROUSEL ROW
+   CAROUSEL ROW (LINHA DE CARDS)
 ========================= */
 .carousel-row {
   display: flex;
@@ -83,7 +84,7 @@ html, body {
 }
 
 /* =========================
-   CARD
+   CARD (ESTILO DE VÍDEO)
 ========================= */
 .card {
   width: 200px;
@@ -109,7 +110,7 @@ html, body {
 }
 
 /* =========================
-   FOCO ATIVO (TV)
+   FOCO ATIVO (CARD DESTACADO)
 ========================= */
 .card.active {
   transform: scale(1.08);
@@ -118,7 +119,7 @@ html, body {
 }
 
 /* =========================
-   PLAYER
+   PLAYER (TAMANHO DO VÍDEO)
 ========================= */
 video,
 iframe {
@@ -134,4 +135,3 @@ iframe {
 ::-webkit-scrollbar {
   display: none;
 }
-

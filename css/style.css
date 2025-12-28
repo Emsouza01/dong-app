@@ -9,7 +9,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* mata scroll global */
+  overflow: hidden; /* mata o scroll global */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: black;
 }
@@ -23,7 +23,7 @@ html, body {
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
-  transform: scale(1.06);
+  transform: scale(1.05);
   z-index: -3;
 }
 
@@ -69,8 +69,7 @@ html, body {
 #rows {
   display: flex;
   flex-direction: column;
-  gap: 42px;
-  padding: 0 60px;
+  gap: 50px;
 }
 
 /* =========================
@@ -79,7 +78,8 @@ html, body {
 .carousel-row {
   display: flex;
   gap: 26px;
-  overflow: hidden; /* TV NÃO SCROLLA */
+  overflow-x: hidden; /* TV NÃO SCROLLA */
+  padding-left: 10px;
 }
 
 /* =========================
@@ -92,7 +92,7 @@ html, body {
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);
-  opacity: 0.8;
+  opacity: 0.85;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -112,7 +112,7 @@ html, body {
    FOCO ATIVO (TV)
 ========================= */
 .card.active {
-  transform: scale(1.08); /* ↓ MENOR */
+  transform: scale(1.08);
   box-shadow: 0 16px 40px rgba(0,0,0,0.7);
   opacity: 1;
 }
@@ -134,4 +134,3 @@ iframe {
 ::-webkit-scrollbar {
   display: none;
 }
-

@@ -9,7 +9,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* mata o scroll global */
+  overflow: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: black;
 }
@@ -134,3 +134,4 @@ iframe {
 ::-webkit-scrollbar {
   display: none;
 }
+

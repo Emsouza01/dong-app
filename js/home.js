@@ -1,68 +1,78 @@
 const carousel = document.getElementById("carousel");
+const bg = document.getElementById("bg");
+
 let currentIndex = 0;
+let cards = [];
+const COLUMNS = 5;
 
-async function fetchData() {
-  const data = await getShows(); // Supabase API para obter os shows
-  if (!Array.isArray(data)) {
-    console.error('API não retornou dados válidos.');
-    return;
-  }
+getShows().then(shows => {
 
-  renderCards(data);
-}
+  carousel.innerHTML = "";
 
-function renderCards(items) {
-  carousel.innerHTML = ''; // Limpa o conteúdo anterior
-
-  items.forEach((item, index) => {
+  shows.forEach(item => {
     const card = document.createElement("div");
-    card.className = "card" + (index === 0 ? " active" : ""); // Foco no primeiro card
+    card.className = "card";
+    card.tabIndex = -1;
 
     card.innerHTML = `
-      <img src="${item.cover || item.image || ''}" alt="${item.title || item.name || ''}">
-      <h3>${item.title || item.name || 'Sem título'}</h3>
+      <img src="${item.cover}">
+      <h3>${item.title}</h3>
     `;
 
-    // Adiciona evento de foco para mudar o fundo
-    card.addEventListener('focus', () => {
-      document.getElementById('bg').style.backgroundImage = `url(${item.cover || item.banner})`;
+    const bgImage = item.banner || item.cover;
+
+    card.addEventListener("focus", () => {
+      if (bgImage) bg.style.backgroundImage = `url(${bgImage})`;
     });
 
-    // Navega para a página de detalhes ao clicar no card
-    card.addEventListener('click', () => {
+    card.addEventListener("click", () => {
       window.location.href = `details.html?id=${item.id}`;
     });
 
     carousel.appendChild(card);
   });
 
-  // Atualiza o foco
-  updateFocus();
-}
+  cards = [...document.querySelectorAll(".card")];
+  if (!cards.length) return;
 
-// Função para atualizar o foco nos cards
-function updateFocus() {
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(c => c.classList.remove('active'));
-  
-  const activeCard = cards[currentIndex];
-  activeCard.classList.add('active');
-  activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-}
+  // fundo inicial
+  bg.style.backgroundImage = `url(${shows[0].banner || shows[0].cover})`;
 
-// Navegação com as setas do teclado
-document.addEventListener('keydown', e => {
-  const cards = document.querySelectorAll('.card');
-  
-  if (e.key === 'ArrowRight' && currentIndex < cards.length - 1) {
-    currentIndex++;
-  } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
-    currentIndex--;
+  activateCard(0);
+
+  document.addEventListener("keydown", e => {
+    let nextIndex = currentIndex;
+
+    if (e.key === "ArrowRight" && currentIndex < cards.length - 1) {
+      nextIndex++;
+    }
+
+    if (e.key === "ArrowLeft" && currentIndex > 0) {
+      nextIndex--;
+    }
+
+    if (e.key === "ArrowDown" && currentIndex + COLUMNS < cards.length) {
+      nextIndex += COLUMNS;
+    }
+
+    if (e.key === "ArrowUp" && currentIndex - COLUMNS >= 0) {
+      nextIndex -= COLUMNS;
+    }
+
+    if (e.key === "Enter") {
+      cards[currentIndex].click();
+      return;
+    }
+
+    if (nextIndex !== currentIndex) {
+      activateCard(nextIndex);
+    }
+  });
+
+  function activateCard(index) {
+    cards[currentIndex]?.classList.remove("active");
+    currentIndex = index;
+    cards[currentIndex].classList.add("active");
+    cards[currentIndex].focus({ preventScroll: true });
   }
-
-  updateFocus();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  fetchData(); // Chama a função para buscar os dados e renderizar os cards
 });

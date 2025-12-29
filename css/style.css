@@ -132,14 +132,13 @@ body {
 /* =========================
    CARD (TAMANHO FIXO)
 ========================= */
+
 .card {
   width: 200px;
   min-width: 200px;
   max-width: 200px;
-
   flex: 0 0 auto; /* NÃO CRESCE, NÃO ENCOLHE */
 
-  margin-left: 4px; /* micro-ajuste seguro */
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);
@@ -157,6 +156,23 @@ body {
     opacity 0.25s ease;
 }
 
+/* respiro real à esquerda */
+#carousel .card:first-child {
+  margin-left: 40px;
+}
+
+
+/* foco / ativo */
+.card.active,
+.card:focus,
+.card.focused {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 0 4px #1db954,
+    0 14px 40px rgba(0,0,0,0.6);
+  z-index: 2;
+}
+
 .card img {
   width: 100%;
   display: block;
@@ -169,17 +185,6 @@ body {
   color: #e5e5e5;
   font-weight: 500;
 }
-
-/* =========================
-   CARD ATIVO
-========================= */
-.card.active {
-  transform: scale(1.08);
-  background: rgba(0,0,0,0.55);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.6);
-  opacity: 1;
-}
-
 
 /* =========================
    DETAILS

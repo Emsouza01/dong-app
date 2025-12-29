@@ -118,6 +118,7 @@ body {
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 20px 40px;
+  padding-left: clamp(80px, 6vw, 120px);
 
   justify-content: flex-start;
 

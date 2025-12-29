@@ -1,13 +1,24 @@
 const carousel = document.getElementById("carousel");
 const bg = document.getElementById("bg");
+const searchInput = document.getElementById("searchInput"); // 🔹 NOVO
 
 let currentIndex = 0;
 let cards = [];
+let allShows = []; // 🔹 NOVO
 const COLUMNS = 5;
 
-getShows().then(shows => {
-
+// =======================
+// RENDER
+// =======================
+function renderCards(shows) {
   carousel.innerHTML = "";
+  cards = [];
+  currentIndex = 0;
+
+  if (!shows.length) {
+    bg.style.backgroundImage = "";
+    return;
+  }
 
   shows.forEach(item => {
     const card = document.createElement("div");
@@ -30,49 +41,78 @@ getShows().then(shows => {
     });
 
     carousel.appendChild(card);
+    cards.push(card);
   });
-
-  cards = [...document.querySelectorAll(".card")];
-  if (!cards.length) return;
 
   // fundo inicial
   bg.style.backgroundImage = `url(${shows[0].banner || shows[0].cover})`;
 
   activateCard(0);
+}
 
-  document.addEventListener("keydown", e => {
-    let nextIndex = currentIndex;
+// =======================
+// FETCH
+// =======================
+getShows().then(shows => {
+  allShows = shows;          // 🔹 NOVO
+  renderCards(allShows);     // 🔹 AJUSTE
+});
 
-    if (e.key === "ArrowRight" && currentIndex < cards.length - 1) {
-      nextIndex++;
-    }
+// =======================
+// NAVEGAÇÃO
+// =======================
+document.addEventListener("keydown", e => {
+  if (!cards.length) return;
 
-    if (e.key === "ArrowLeft" && currentIndex > 0) {
-      nextIndex--;
-    }
+  let nextIndex = currentIndex;
 
-    if (e.key === "ArrowDown" && currentIndex + COLUMNS < cards.length) {
-      nextIndex += COLUMNS;
-    }
+  if (e.key === "ArrowRight" && currentIndex < cards.length - 1) {
+    nextIndex++;
+  }
 
-    if (e.key === "ArrowUp" && currentIndex - COLUMNS >= 0) {
-      nextIndex -= COLUMNS;
-    }
+  if (e.key === "ArrowLeft" && currentIndex > 0) {
+    nextIndex--;
+  }
 
-    if (e.key === "Enter") {
-      cards[currentIndex].click();
-      return;
-    }
+  if (e.key === "ArrowDown" && currentIndex + COLUMNS < cards.length) {
+    nextIndex += COLUMNS;
+  }
 
-    if (nextIndex !== currentIndex) {
-      activateCard(nextIndex);
-    }
-  });
+  if (e.key === "ArrowUp" && currentIndex - COLUMNS >= 0) {
+    nextIndex -= COLUMNS;
+  }
 
-  function activateCard(index) {
-    cards[currentIndex]?.classList.remove("active");
-    currentIndex = index;
-    cards[currentIndex].classList.add("active");
-    cards[currentIndex].focus({ preventScroll: true });
+  if (e.key === "Enter") {
+    cards[currentIndex].click();
+    return;
+  }
+
+  if (nextIndex !== currentIndex) {
+    activateCard(nextIndex);
   }
 });
+
+// =======================
+// ATIVAR CARD
+// =======================
+function activateCard(index) {
+  cards[currentIndex]?.classList.remove("active");
+  currentIndex = index;
+  cards[currentIndex].classList.add("active");
+  cards[currentIndex].focus({ preventScroll: true });
+}
+
+// =======================
+// SEARCH
+// =======================
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    const term = searchInput.value.toLowerCase();
+
+    const filtered = allShows.filter(item =>
+      item.title.toLowerCase().includes(term)
+    );
+
+    renderCards(filtered);
+  });
+}

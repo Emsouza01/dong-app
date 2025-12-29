@@ -23,6 +23,37 @@ body {
 }
 
 /* =========================
+   SEARCH BAR
+========================= */
+.search-container {
+  padding: 10px 40px 20px;
+}
+
+#searchInput {
+  width: 420px;
+  max-width: 80%;
+  padding: 14px 18px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+}
+
+#searchInput::placeholder {
+  color: #bbb;
+}
+
+/* foco para controle remoto */
+#searchInput:focus {
+  outline: 3px solid #1db954;
+  background: rgba(0,0,0,0.7);
+}
+
+
+/* =========================
    BLUR GRADIENTE (BAIXO)
 ========================= */
 #bg::after {

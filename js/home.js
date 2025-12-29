@@ -1,22 +1,23 @@
 const carousel = document.getElementById("carousel");
 const bg = document.getElementById("bg");
-const searchInput = document.getElementById("searchInput"); // 🔹 NOVO
+const searchInput = document.getElementById("searchInput");
 
 let currentIndex = 0;
 let cards = [];
-let allShows = []; // 🔹 NOVO
+let allShows = [];
 const COLUMNS = 5;
 
-// =======================
-// RENDER
-// =======================
+/* =======================
+   RENDER CARDS
+======================= */
 function renderCards(shows) {
   carousel.innerHTML = "";
   cards = [];
   currentIndex = 0;
 
-  if (!shows.length) {
+  if (!shows || !shows.length) {
     bg.style.backgroundImage = "";
+    carousel.classList.remove("few-items");
     return;
   }
 
@@ -33,7 +34,9 @@ function renderCards(shows) {
     const bgImage = item.banner || item.cover;
 
     card.addEventListener("focus", () => {
-      if (bgImage) bg.style.backgroundImage = `url(${bgImage})`;
+      if (bgImage) {
+        bg.style.backgroundImage = `url(${bgImage})`;
+      }
     });
 
     card.addEventListener("click", () => {
@@ -44,23 +47,37 @@ function renderCards(shows) {
     cards.push(card);
   });
 
-  // fundo inicial
+  /* ===== ajuste para poucos itens ===== */
+  if (cards.length <= 2) {
+    carousel.classList.add("few-items");
+  } else {
+    carousel.classList.remove("few-items");
+  }
+
+  /* ===== fundo inicial ===== */
   bg.style.backgroundImage = `url(${shows[0].banner || shows[0].cover})`;
 
+  /* ===== foco inicial ===== */
   activateCard(0);
+
+  /* ===== caso especial: 1 card ===== */
+  if (cards.length === 1) {
+    cards[0].classList.add("active", "focused");
+    cards[0].focus();
+  }
 }
 
-// =======================
-// FETCH
-// =======================
+/* =======================
+   FETCH INICIAL
+======================= */
 getShows().then(shows => {
-  allShows = shows;          // 🔹 NOVO
-  renderCards(allShows);     // 🔹 AJUSTE
+  allShows = shows || [];
+  renderCards(allShows);
 });
 
-// =======================
-// NAVEGAÇÃO
-// =======================
+/* =======================
+   NAVEGAÇÃO (TECLADO / TV)
+======================= */
 document.addEventListener("keydown", e => {
   if (!cards.length) return;
 
@@ -74,11 +91,17 @@ document.addEventListener("keydown", e => {
     nextIndex--;
   }
 
-  if (e.key === "ArrowDown" && currentIndex + COLUMNS < cards.length) {
+  if (
+    e.key === "ArrowDown" &&
+    currentIndex + COLUMNS < cards.length
+  ) {
     nextIndex += COLUMNS;
   }
 
-  if (e.key === "ArrowUp" && currentIndex - COLUMNS >= 0) {
+  if (
+    e.key === "ArrowUp" &&
+    currentIndex - COLUMNS >= 0
+  ) {
     nextIndex -= COLUMNS;
   }
 
@@ -92,22 +115,33 @@ document.addEventListener("keydown", e => {
   }
 });
 
-// =======================
-// ATIVAR CARD
-// =======================
+/* =======================
+   ATIVAR CARD
+======================= */
 function activateCard(index) {
-  cards[currentIndex]?.classList.remove("active");
+  cards[currentIndex]?.classList.remove("active", "focused");
+
   currentIndex = index;
-  cards[currentIndex].classList.add("active");
-  cards[currentIndex].focus({ preventScroll: true });
+
+  const card = cards[currentIndex];
+  if (!card) return;
+
+  card.classList.add("active", "focused");
+  card.focus({ preventScroll: true });
+
+  card.scrollIntoView({
+    behavior: "smooth",
+    inline: "center",
+    block: "nearest"
+  });
 }
 
-// =======================
-// SEARCH
-// =======================
+/* =======================
+   SEARCH
+======================= */
 if (searchInput) {
   searchInput.addEventListener("input", () => {
-    const term = searchInput.value.toLowerCase();
+    const term = searchInput.value.toLowerCase().trim();
 
     const filtered = allShows.filter(item =>
       item.title.toLowerCase().includes(term)

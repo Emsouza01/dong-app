@@ -138,6 +138,7 @@ body {
   min-width: 200px;
   max-width: 200px;
   flex: 0 0 auto; /* NÃO CRESCE, NÃO ENCOLHE */
+   
 
   border-radius: 14px;
   overflow: hidden;
@@ -160,8 +161,11 @@ body {
 #carousel .card:first-child {
   margin-left: 40px;
 }
-
-
+#carousel .card:first-child.active,
+#carousel .card:first-child:focus,
+#carousel .card:first-child.focused {
+  transform: scale(1.05) translateX(10px);
+}
 /* foco / ativo */
 .card.active,
 .card:focus,
@@ -176,7 +180,10 @@ body {
 .card img {
   width: 100%;
   display: block;
+  height: 112px;
+  object-fit: cover;
 }
+
 
 .card h3 {
   font-size: 14px;

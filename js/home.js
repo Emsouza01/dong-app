@@ -8,6 +8,11 @@ let allShows = [];
 const COLUMNS = 5;
 
 /* =======================
+   CONTROLE DE FOCO
+======================= */
+let focusArea = "search"; // "search" | "carousel"
+
+/* =======================
    RENDER CARDS
 ======================= */
 function renderCards(shows) {
@@ -47,7 +52,7 @@ function renderCards(shows) {
     cards.push(card);
   });
 
-  /* ===== ajuste para poucos itens ===== */
+  /* ===== poucos itens ===== */
   if (cards.length <= 2) {
     carousel.classList.add("few-items");
   } else {
@@ -56,15 +61,6 @@ function renderCards(shows) {
 
   /* ===== fundo inicial ===== */
   bg.style.backgroundImage = `url(${shows[0].banner || shows[0].cover})`;
-
-  /* ===== foco inicial ===== */
-  activateCard(0);
-
-  /* ===== caso especial: 1 card ===== */
-  if (cards.length === 1) {
-    cards[0].classList.add("active", "focused");
-    cards[0].focus();
-  }
 }
 
 /* =======================
@@ -73,12 +69,31 @@ function renderCards(shows) {
 getShows().then(shows => {
   allShows = shows || [];
   renderCards(allShows);
+
+  // foco inicial sempre no search
+  if (searchInput) {
+    focusArea = "search";
+    searchInput.focus();
+  }
 });
 
 /* =======================
-   NAVEGAÇÃO (TECLADO / TV)
+   NAVEGAÇÃO TV / TECLADO
 ======================= */
 document.addEventListener("keydown", e => {
+  /* ========= SEARCH ========= */
+  if (focusArea === "search") {
+    if (e.key === "ArrowDown" || e.key === "Enter") {
+      if (cards.length) {
+        focusArea = "carousel";
+        activateCard(0);
+      }
+      e.preventDefault();
+    }
+    return;
+  }
+
+  /* ========= CAROUSEL ========= */
   if (!cards.length) return;
 
   let nextIndex = currentIndex;
@@ -91,18 +106,15 @@ document.addEventListener("keydown", e => {
     nextIndex--;
   }
 
-  if (
-    e.key === "ArrowDown" &&
-    currentIndex + COLUMNS < cards.length
-  ) {
+  if (e.key === "ArrowDown" && currentIndex + COLUMNS < cards.length) {
     nextIndex += COLUMNS;
   }
 
-  if (
-    e.key === "ArrowUp" &&
-    currentIndex - COLUMNS >= 0
-  ) {
-    nextIndex -= COLUMNS;
+  if (e.key === "ArrowUp") {
+    focusArea = "search";
+    searchInput.focus();
+    e.preventDefault();
+    return;
   }
 
   if (e.key === "Enter") {
@@ -122,7 +134,6 @@ function activateCard(index) {
   cards[currentIndex]?.classList.remove("active", "focused");
 
   currentIndex = index;
-
   const card = cards[currentIndex];
   if (!card) return;
 
@@ -137,7 +148,7 @@ function activateCard(index) {
 }
 
 /* =======================
-   SEARCH
+   SEARCH (FOCO FIXO)
 ======================= */
 if (searchInput) {
   searchInput.addEventListener("input", () => {
@@ -148,5 +159,8 @@ if (searchInput) {
     );
 
     renderCards(filtered);
+
+    focusArea = "search";
+    searchInput.focus();
   });
 }

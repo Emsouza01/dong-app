@@ -118,7 +118,7 @@ body {
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 20px 40px;
-  padding-left: clamp(80px, 6vw, 120px);
+  padding-left: clamp(80px, 6vw, 80px);
 
   justify-content: flex-start;
 
@@ -139,6 +139,7 @@ body {
 
   flex: 0 0 auto; /* NÃO CRESCE, NÃO ENCOLHE */
 
+  margin-left: 4px; /* micro-ajuste seguro */
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);

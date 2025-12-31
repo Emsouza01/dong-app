@@ -138,21 +138,6 @@ body {
   min-width: 200px;
   max-width: 200px;
   flex: 0 0 auto; /* NÃO CRESCE, NÃO ENCOLHE */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   border-radius: 14px;
   overflow: hidden;
   background: rgba(0,0,0,0.35);
@@ -243,8 +228,6 @@ iframe {
   height: 100vh;
   background: black;
 }
-
-
 
 /* =========================
    FOCO TV

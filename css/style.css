@@ -108,20 +108,26 @@ body {
   margin-bottom: 20px;
 }
 
-
 /* =========================
-   CARROSSEL
+   CARROSSEL (AJUSTADO)
 ========================= */
 #carousel {
   display: flex;
   gap: 26px;
   overflow-x: auto;
   scroll-behavior: smooth;
+  
+  /* Aumentei o padding visual para acompanhar o scroll-padding */
   padding: 20px 40px;
-  padding-left: clamp(80px, 6vw, 80px);
+  padding-left: 100px; 
+
+  /* --- AQUI ESTÁ A CORREÇÃO --- */
+  /* Isso garante que o scroll pare antes da borda, 
+     dando espaço para o card crescer sem cortar */
+  scroll-padding-left: 100px; 
+  scroll-padding-right: 40px; /* Mantém o respiro da direita */
 
   justify-content: flex-start;
-
   scroll-snap-type: x mandatory;
 }
 
@@ -155,26 +161,16 @@ body {
     opacity 0.25s ease;
 }
 
-/* respiro real à esquerda */
-#carousel .card:first-child {
-  margin-left: 40px;
-}
-#carousel .card:first-child.active,
-#carousel .card:first-child:focus,
-#carousel .card:first-child.focused {
-  transform: scale(1.05) translateX(10px);
-}
-/* foco / ativo */
+/* Foco / Ativo (Mantenha como está, apenas remova o translateX extra se tiver restado) */
 .card.active,
 .card:focus,
 .card.focused {
-  transform: scale(1.05);
+  transform: scale(1.05); /* O translateX não é mais necessário */
   box-shadow:
     0 0 0 4px #1db954,
     0 14px 40px rgba(0,0,0,0.6);
   z-index: 2;
 }
-
 .card img {
   width: 100%;
   display: block;

@@ -65,7 +65,7 @@ getShows().then(shows => {
 
       // HTML interno do card do episódio
       div.innerHTML = `
-        <span class="ep-number">Episódio ${ep.number}</span>
+
         <span class="ep-title">${ep.title}</span>
       `;
 
